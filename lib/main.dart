@@ -1,7 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/pages/home_page.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
+  log("app start");
+  await Hive.initFlutter();
+
+  final _localDatabase = await Hive.openBox("MyDatabase");
+
   runApp(MyApp());
 }
 

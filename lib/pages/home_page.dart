@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_3/database/local_database.dart';
 import 'package:flutter_application_3/util/add_todo_dialog.dart';
 import 'package:flutter_application_3/util/todo_tile.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,17 +13,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _controller = TextEditingController();
+  LocalDataBase db = LocalDataBase();
 
-  List toDoList = [
-    ["aiijkfd", false],
-    ["asfdasdf", true],
-    ['6930', true],
-  ];
+  @override
+  void initState() {
+    // TODO: implement initState
+    db.LoadData();
+    super.initState();
+  }
 
   void CheckBoxChange(bool? value, int index) {
     setState(() {
-      toDoList[index][1] = !toDoList[index][1];
+      db.toDoList[index][1] = !db.toDoList[index][1];
     });
+    db.UpdateData();
   }
 
   void CreateNewTask() {
@@ -39,10 +44,19 @@ class _HomePageState extends State<HomePage> {
 
   void SaveTask() {
     setState(() {
-      toDoList.add([_controller.text, false]);
+      db.toDoList.add([_controller.text, false]);
+      _controller.clear();
     });
     //back to homescreen
     Navigator.of(context).pop();
+    db.UpdateData();
+  }
+
+  void RemoveTask(int index) {
+    setState(() {
+      db.toDoList.removeAt(index);
+    });
+    db.UpdateData();
   }
 
   @override
@@ -58,12 +72,13 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Icons.add),
       ),
       body: ListView.builder(
-        itemCount: toDoList.length,
+        itemCount: db.toDoList.length,
         itemBuilder: (context, index) {
           return TodoTile(
-            name: toDoList[index][0],
-            completed: toDoList[index][1],
-            onChanged: (d) => CheckBoxChange(d, index),
+            name: db.toDoList[index][0],
+            completed: db.toDoList[index][1],
+            onChanged: (value) => CheckBoxChange(value, index),
+            onRemove: () => RemoveTask(index),
           );
         },
       ),
