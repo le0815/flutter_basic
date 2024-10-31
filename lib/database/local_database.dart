@@ -1,20 +1,28 @@
-// import 'dart:math';
 import 'dart:developer';
+
 import 'package:hive_flutter/hive_flutter.dart';
 
-class LocalDataBase {
+class LocalDatabase {
   List toDoList = [];
-  final String _boxname = "ToDoList";
+  final List initList = [
+    ["It's seem have not any to do here", false],
+    ["Create new ones", false],
+  ];
 
-  final myBox = Hive.box('MyDatabase');
+  final String databaseKey = "ToDo";
+  // final localDatabase = Hive.openBox("ToDoDataBase");
 
-  void LoadData() {
-    log("database: ${myBox.get(_boxname)}");
-    toDoList = myBox.get(_boxname) ?? [];
+  var myDatabase = Hive.box("ToDoDataBase");
+
+  void LoadDatabase() {
+    log("loading database: ${myDatabase.get(databaseKey)}");
+    toDoList = myDatabase.get(databaseKey) ?? initList;
   }
 
-  void UpdateData() {
-    myBox.put(_boxname, toDoList);
-    log("updated database: ${myBox.get(_boxname)}");
+  void UpdateDatabase() {
+    myDatabase.put(databaseKey, toDoList);
+    log("putting data to database");
+    log("data put: $toDoList");
+    log('database: ${myDatabase.get(databaseKey)}');
   }
 }

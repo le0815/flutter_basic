@@ -1,43 +1,38 @@
 import 'package:flutter/material.dart';
 
-class AddTodoDialog extends StatelessWidget {
+class DialogCreateNew extends StatelessWidget {
   final TextEditingController controller;
-  VoidCallback? onSave;
-  VoidCallback? onBack;
+  final VoidCallback onSave;
+  final VoidCallback onBack;
 
-  AddTodoDialog(
-      {super.key,
-      required this.controller,
-      required this.onSave,
-      required this.onBack});
+  const DialogCreateNew({
+    super.key,
+    required this.onSave,
+    required this.onBack,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.blue[100],
       content: Container(
-        // width: 50,
-        height: 120,
+        height: 100,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             TextField(
               controller: controller,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Create a new note",
-                  filled: true),
             ),
+            const SizedBox(height: 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
                   onPressed: onBack,
-                  child: const Text('Back'),
+                  child: const Text("Back"),
                 ),
                 TextButton(
                   onPressed: onSave,
-                  child: const Text('Save'),
+                  child: const Text("Save"),
                 ),
               ],
             )
