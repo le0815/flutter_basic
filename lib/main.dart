@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/pages/home_page.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_application_3/models/cart.dart';
+import 'package:flutter_application_3/pages/welcome_page.dart';
+import 'package:provider/provider.dart';
 
-void main() async {
-  await Hive.initFlutter();
-
-  final localDatabase = await Hive.openBox("ToDoDataBase");
-
-  runApp(const MyApp());
+void main() {
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -15,8 +12,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePage(),
+    return ChangeNotifierProvider(
+      create: (context) => Cart(),
+      child: MaterialApp(
+        theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+        home: WelcomePage(),
+      ),
     );
   }
 }

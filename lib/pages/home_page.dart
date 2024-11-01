@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/database/local_database.dart';
-import 'package:flutter_application_3/utils/dialog_create_new.dart';
-import 'package:flutter_application_3/utils/todo_tile.dart';
+import 'package:flutter_application_3/pages/cart_page.dart';
+import 'package:flutter_application_3/pages/shop_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,72 +10,103 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController controller = TextEditingController();
-  LocalDatabase db = LocalDatabase();
+  int currentNavInx = 0;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    db.LoadDatabase();
-    super.initState();
-  }
-
-  void ChangeState(bool? value, int index) {
-    setState(() {
-      db.toDoList[index][1] = !db.toDoList[index][1];
-    });
-    db.UpdateDatabase();
-  }
-
-  void SaveTodo() {
-    String text = controller.text;
-    if (text.isNotEmpty) {
-      setState(() {
-        db.toDoList.add([text, false]);
-      });
-    }
-    db.UpdateDatabase();
-    controller.clear();
-    Navigator.of(context).pop();
-  }
-
-  void RemoveTodo(int index) {
-    setState(() {
-      db.toDoList.removeAt(index);
-    });
-    db.UpdateDatabase();
-  }
+  final List<Widget> pagesList = [const ShopPage(), const CartPage()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Todo App"),
-        backgroundColor: Colors.blue[400],
+        backgroundColor: Colors.transparent,
+        leading: Builder(
+            builder: (context) => IconButton(
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  icon: const Icon(
+                    Icons.menu,
+                    color: Colors.black,
+                  ),
+                )),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return DialogCreateNew(
-                  controller: controller,
-                  onBack: () => Navigator.of(context).pop(),
-                  onSave: SaveTodo,
-                );
-              });
-        },
-        child: Icon(Icons.add),
+      drawer: Drawer(
+        backgroundColor: Colors.black,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                DrawerHeader(
+                  // header image
+                  child: MediaQuery(
+                      data: MediaQuery.of(context).copyWith(invertColors: true),
+                      child: Image.asset(
+                        "images/nike_logo.png",
+                        width: 150,
+                      )),
+                ),
+                // setting
+                const ListTile(
+                  leading: Icon(
+                    Icons.settings,
+                    color: Color.fromARGB(186, 255, 255, 255),
+                  ),
+                  title: Text(
+                    "Setting",
+                    style: TextStyle(color: Color.fromARGB(186, 255, 255, 255)),
+                  ),
+                ),
+                //FAQ
+                const ListTile(
+                  leading: Icon(
+                    Icons.question_answer_rounded,
+                    color: Color.fromARGB(186, 255, 255, 255),
+                  ),
+                  title: Text(
+                    "FAQ",
+                    style: TextStyle(color: Color.fromARGB(186, 255, 255, 255)),
+                  ),
+                ),
+              ],
+            ),
+            // logout
+            const Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: ListTile(
+                leading: Icon(
+                  Icons.logout,
+                  color: Color.fromARGB(186, 255, 255, 255),
+                ),
+                title: Text(
+                  "Log out",
+                  style: TextStyle(color: Color.fromARGB(186, 255, 255, 255)),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
-      body: ListView.builder(
-        itemCount: db.toDoList.length,
-        itemBuilder: (context, index) {
-          return TodoTile(
-            checkState: db.toDoList[index][1],
-            text: db.toDoList[index][0],
-            onChanged: (value) => ChangeState(value, index),
-            onRemove: () => RemoveTodo(index),
-          );
+      body: pagesList[currentNavInx],
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        currentIndex: currentNavInx,
+        enableFeedback: true,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart_outlined),
+            label: "Cart",
+          ),
+        ],
+        onTap: (value) {
+          setState(() {
+            currentNavInx = value;
+          });
         },
       ),
     );
