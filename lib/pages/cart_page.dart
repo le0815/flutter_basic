@@ -24,12 +24,19 @@ class _CartPageState extends State<CartPage> {
                 "My Cart",
                 style: TextStyle(fontSize: 28),
               ),
-              ListView.builder(
-                itemCount: value.GetUSerCart().length,
-                itemBuilder: (context, index) {
-                  Shoe shoe = value.GetUSerCart()[index];
-                  return CartTile(shoe: shoe);
-                },
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 18),
+                  child: ListView.builder(
+                    itemCount: value.GetUSerCart().length,
+                    itemBuilder: (context, index) {
+                      Shoe shoe = value.GetUSerCart()[index];
+                      return CartTile(
+                          shoe: shoe,
+                          onRemove: () => value.RemoveShoeFromCart(shoe));
+                    },
+                  ),
+                ),
               ),
             ],
           ),
