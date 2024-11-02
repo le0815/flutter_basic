@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_3/pages/cart_page.dart';
-import 'package:flutter_application_3/pages/shop_page.dart';
+import 'package:flutter_application_3/components/body_cart.dart';
+import 'package:flutter_application_3/components/body_home.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,25 +10,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int currentNavInx = 0;
+  int currentNavIdx = 0;
 
-  final List<Widget> pagesList = [const ShopPage(), const CartPage()];
+  List<Widget> bodyComponent = [const BodyHome(), const BodyCart()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        title: currentNavIdx == 0 ? Text("Nike Shop") : Text("Your Cart"),
         leading: Builder(
-            builder: (context) => IconButton(
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                  icon: const Icon(
-                    Icons.menu,
-                    color: Colors.black,
-                  ),
-                )),
+          builder: (context) {
+            return IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () => Scaffold.of(context).openDrawer(),
+            );
+          },
+        ),
       ),
       drawer: Drawer(
         backgroundColor: Colors.black,
@@ -38,77 +36,55 @@ class _HomePageState extends State<HomePage> {
             Column(
               children: [
                 DrawerHeader(
-                  // header image
                   child: MediaQuery(
-                      data: MediaQuery.of(context).copyWith(invertColors: true),
-                      child: Image.asset(
-                        "images/nike_logo.png",
-                        width: 150,
-                      )),
+                    data: MediaQuery.of(context).copyWith(invertColors: true),
+                    child: Image.asset("images/nike_logo.png"),
+                  ),
                 ),
-                // setting
                 const ListTile(
                   leading: Icon(
                     Icons.settings,
-                    color: Color.fromARGB(186, 255, 255, 255),
+                    color: Colors.white,
                   ),
                   title: Text(
                     "Setting",
-                    style: TextStyle(color: Color.fromARGB(186, 255, 255, 255)),
-                  ),
-                ),
-                //FAQ
-                const ListTile(
-                  leading: Icon(
-                    Icons.question_answer_rounded,
-                    color: Color.fromARGB(186, 255, 255, 255),
-                  ),
-                  title: Text(
-                    "FAQ",
-                    style: TextStyle(color: Color.fromARGB(186, 255, 255, 255)),
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ],
             ),
-            // logout
-            const Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: ListTile(
-                leading: Icon(
-                  Icons.logout,
-                  color: Color.fromARGB(186, 255, 255, 255),
-                ),
-                title: Text(
-                  "Log out",
-                  style: TextStyle(color: Color.fromARGB(186, 255, 255, 255)),
-                ),
+            const ListTile(
+              leading: Icon(
+                Icons.logout,
+                color: Colors.white,
               ),
-            )
+              title: Text(
+                "Log out",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           ],
         ),
       ),
-      body: pagesList[currentNavInx],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        currentIndex: currentNavInx,
-        enableFeedback: true,
+        currentIndex: currentNavIdx,
+        onTap: (value) {
+          setState(() {
+            currentNavIdx = value;
+          });
+        },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_max_outlined),
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart_outlined),
+            icon: Icon(Icons.shopping_cart_rounded),
             label: "Cart",
           ),
         ],
-        onTap: (value) {
-          setState(() {
-            currentNavInx = value;
-          });
-        },
       ),
+      body: bodyComponent[currentNavIdx],
     );
   }
 }

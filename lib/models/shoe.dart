@@ -1,21 +1,21 @@
 class Shoe {
-  final String name;
-  final double price;
-  final String imgPath;
+  final String nameShoe;
+  final String imgPathShoe;
+  final double priceShoe;
 
-  Shoe({
-    required this.name,
-    required this.price,
-    required this.imgPath,
+  const Shoe({
+    required this.nameShoe,
+    required this.imgPathShoe,
+    required this.priceShoe,
   });
 
   @override
   String toString() {
     var shoe = {
-      'name': name,
-      'price': price,
+      "name": nameShoe,
+      "price": priceShoe,
+      "imgPath": imgPathShoe,
     };
-    // TODO: implement toString
     return shoe.toString();
   }
 }

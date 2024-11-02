@@ -2,61 +2,71 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_3/models/shoe.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-class ShoeTile extends StatelessWidget {
-  Shoe shoe;
-  Function()? onTap;
-  ShoeTile({super.key, required this.shoe, required this.onTap});
+class ShopTile extends StatelessWidget {
+  final Shoe shoe;
+  final Function()? onTap;
+  const ShopTile({super.key, required this.shoe, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 25, bottom: 75, top: 30),
+      padding: const EdgeInsets.only(left: 15),
       child: Container(
         width: 300,
+        height: 450,
         decoration: BoxDecoration(
+          color: Colors.black54,
           borderRadius: BorderRadius.circular(12),
-          color: Color.fromARGB(247, 247, 247, 247),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // display shoe image
+            SizedBox(
+              height: 1,
+            ),
+            // image of shoe
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
-                shoe.imgPath,
-                height: 350,
+                shoe.imgPathShoe,
+                width: 250,
               ),
             ),
-            // display description
+            // information of shoe, '+' button
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // description for item
                 Padding(
-                  padding: const EdgeInsets.only(left: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        shoe.name,
-                        style: TextStyle(fontSize: 28),
+                        shoe.nameShoe,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                        ),
                       ),
-                      Text("${shoe.price} VND")
+                      Text("${shoe.priceShoe} VND"),
                     ],
                   ),
                 ),
-                // add item
+                // 'add' button
                 GestureDetector(
                   onTap: onTap,
                   child: Container(
+                    padding: EdgeInsets.all(20),
                     decoration: const BoxDecoration(
                       color: Colors.black,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        bottomRight: Radius.circular(12),
+                      ),
                     ),
                     child: const Icon(
                       Icons.add,
                       color: Colors.white,
-                      size: 48,
                     ),
                   ),
                 )

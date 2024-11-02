@@ -7,40 +7,33 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Image.asset(
                 "images/nike_logo.png",
-                height: 500,
                 width: 300,
               ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color>(Colors.black),
-                  shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                ),
+              OutlinedButton(
                 onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ),
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    )),
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(Colors.black),
                 ),
                 child: const Text(
                   "Just Do It",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 28,
-                      color: Colors.white),
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),
