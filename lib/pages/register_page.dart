@@ -6,29 +6,32 @@ import 'package:flutter_application_5/components/my_circle_progressbar.dart';
 import 'package:flutter_application_5/components/my_err_dialog.dart';
 import 'package:flutter_application_5/components/my_textfield.dart';
 
-class LoginPage extends StatefulWidget {
-  final Function()? onRegister;
-  final Function()? onLoginWithGoogle;
-  const LoginPage({
-    super.key,
-    required this.onRegister,
-    required this.onLoginWithGoogle,
-  });
+class RegisterPage extends StatefulWidget {
+  final Function()? onLogin;
+  const RegisterPage({super.key, required this.onLogin});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   TextEditingController usrNameController = TextEditingController();
   TextEditingController pwdController = TextEditingController();
+  TextEditingController confirmPwdController = TextEditingController();
 
-  void UserSignIn() async {
+  void UserSignUp() async {
+    // check if pwd is match
+    if (pwdController.text != confirmPwdController.text) {
+      // show err
+      log("pwd do not match");
+      return MyErrDialog(msg: "Your password do not match!", context: context);
+    }
+
     //progress bar
     MyCircleProgressBar(context);
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: usrNameController.text,
         password: pwdController.text,
       );
@@ -64,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 30,
                 ),
-                const Text("Come back, you've been missed!"),
+                const Text("Good to see you, my new friend!"),
                 const SizedBox(
                   height: 50,
                 ),
@@ -83,22 +86,22 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: "Password",
                   hindText: true,
                 ),
-                // forgot pwd
-                const Padding(
-                  padding: EdgeInsets.only(right: 25),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text("Forgot password?"),
-                    ],
-                  ),
+                const SizedBox(
+                  height: 25,
                 ),
+                // confirm pwd textfield
+                MyTextfield(
+                  controller: confirmPwdController,
+                  hintText: "Confirm Password",
+                  hindText: true,
+                ),
+
                 const SizedBox(
                   height: 18,
                 ),
-                // sign in btn
+                // sign up btn
                 GestureDetector(
-                  onTap: UserSignIn,
+                  onTap: UserSignUp,
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 25),
                     padding: const EdgeInsets.all(16),
@@ -108,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     child: const Center(
                       child: Text(
-                        "Sign In",
+                        "Sign Up",
                         style: TextStyle(
                           color: Colors.white,
                         ),
@@ -128,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                         color: Colors.black,
                       ),
                     ),
-                    Text(" Or continue with "),
+                    Text(" Already have an account? "),
                     Expanded(
                       child: Divider(
                         thickness: 1,
@@ -140,23 +143,12 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: widget.onLoginWithGoogle,
-                      child: const Text(
-                        "Sign in with Google",
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: widget.onRegister,
-                      child: const Text(
-                        "Register",
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                    )
-                  ],
+                GestureDetector(
+                  onTap: widget.onLogin,
+                  child: const Text(
+                    "Login",
+                    style: TextStyle(color: Colors.blue),
+                  ),
                 )
               ],
             ),
